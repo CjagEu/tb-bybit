@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  python:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: python-build
+    volumes:
+      - .:/code
+    environment:
+        - TZ=Europe/Madrid
+    env_file:
+      - .env
