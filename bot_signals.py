@@ -12,9 +12,6 @@ import calendar
 import pandas as pd
 import requests
 
-print(MY_SECRET_KEY)
-print(MY_API_KEY)
-
 # Lista de simbolos sobre los que el bot iterará
 symbols = ['BTCUSDT']
 #symbols = ['BTCUSDT', 'BNBUSDT' ,'AVAXUSDT', 'ETHUSDT', 'ADAUSDT', 'SOLUSDT', 'DOTUSDT','LTCUSDT', 'ETCUSDT', 'XRPUSDT', 'TRXUSDT','MATICUSDT']
