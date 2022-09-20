@@ -1,7 +1,7 @@
 from logging import exception
 from pybit.usdt_perpetual import HTTP
 
-import config
+
 from herramientas import *
 from telegram_bot import send_message
 from config import MY_API_KEY, MY_SECRET_KEY
