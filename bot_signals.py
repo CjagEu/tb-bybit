@@ -1,11 +1,9 @@
-from logging import exception
 from pybit.usdt_perpetual import HTTP
-
-
 from herramientas import *
 from telegram_bot import send_message
 from config import MY_API_KEY, MY_SECRET_KEY
 from bot_trader import meter_operacion
+from logging import exception
 
 import time
 import calendar
@@ -100,54 +98,58 @@ while True:
             log_mensaje_maximo = 'SOBRE' if lastprice > maximo else 'BAJO'
             log_mensaje_minimo = 'BAJO' if lastprice < minimo else 'SOBRE'
 
-        # ----------------------------------------------------------------------------------------------------------------------------------------------------
-        # Conexión con bybit
-        try:
-            #session = HTTP(endpoint='https://api.bybit.com', api_key=MY_API_KEY, api_secret=MY_SECRET_KEY)
+            # -------------------------------------------------------------------------------------------------------------------------------------------
+            # Conexión con bybit
+            try:
+                #session = HTTP(endpoint='https://api.bybit.com', api_key=MY_API_KEY, api_secret=MY_SECRET_KEY)
             
-            print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second) + "   " + str(symbols[contador_symbols]) + "  " + str(contador_symbols+1) + "     Min: " + str(minimo) + "  Max: " + str(maximo))
-            #logger.info(str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.utcnow().second) + "   " + str(symbols[contador_symbols]) + "  " + str(contador_symbols+1) + "     Min: " + str(minimo) + "  Max: " + str(maximo))
-            #logger.info("Distancia hasta máximo: " + str(porcentaje_distancia_maximo)+"%")
-            #logger.info("Distancia hasta mínimo: " + str(porcentaje_distancia_minimo)+"%")
+                print(str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second) + "   " + str(symbols[contador_symbols]) + "  " + str(contador_symbols+1) + "     Min: " + str(minimo) + "  Max: " + str(maximo))
+                #logger.info(str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.utcnow().second) + "   " + str(symbols[contador_symbols]) + "  " + str(contador_symbols+1) + "     Min: " + str(minimo) + "  Max: " + str(maximo))
+                #logger.info("Distancia hasta máximo: " + str(porcentaje_distancia_maximo)+"%")
+                #logger.info("Distancia hasta mínimo: " + str(porcentaje_distancia_minimo)+"%")
 
-            # Obtener los USDT disponibles que tengo, ['equity'], o si tengo ya una posición lo que me queda estará en ['available_balance']
-            disponible_antes = session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']
+                # Obtener los USDT disponibles que tengo, ['equity'], o si tengo ya una posición lo que me queda estará en ['available_balance']
+                disponible_antes = session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']
 
-            # Compruebo condiciones para long (solo opera entre las 22 de la noche y las 12 del mediodia)
-            if (datetime.now().hour == 22 or datetime.now().hour == 23 or datetime.now().hour <= 11) and condicion_alerta_minimo:
-                #send_message(f"{symbols[contador_symbols]} a {porcentaje_distancia_minimo}%     {log_mensaje_minimo} MÍNIMO")
-                if condicion_exacta_long:
-                    meter_operacion(session=session, symbol=symbols[contador_symbols], lastprice=lastprice, abrir_long=condicion_exacta_long, abrir_short=False, minimo=minimo, maximo=maximo)
-                    while hay_posicion(session, symbols[contador_symbols]):
-                        # Opcion de loggear "Esperando a que se complete orden... y el lastprice, tp y sl para comprobar si se cumplió lo esperado"
-                        print(f"Posición long abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
-                        time.sleep(60)
-                    # Comparo el disponible antes del trade y después del trade
-                    send_message(f"¡TRADE CERRADO! Resultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
-                    sys.exit()                                            
-                posicion_symbols[contador_symbols] = 1
-                inicio_timers[contador_symbols] = time.time()
-            # Compruebo condiciones para short (solo entre las 22 de la noche y las 12 del mediodia)
-            elif (datetime.now().hour == 22 or datetime.now().hour == 23 or datetime.now().hour <= 11) and condicion_alerta_maximo:
-                #send_message(f"{symbols[contador_symbols]} a {porcentaje_distancia_maximo}%     {log_mensaje_maximo} MÁXIMO")
-                if condicion_exacta_short:
-                    meter_operacion(session=session, symbol=symbols[contador_symbols], lastprice=lastprice, abrir_long=False, abrir_short=condicion_exacta_short, minimo=minimo, maximo=maximo)
-                    while hay_posicion(session, symbols[contador_symbols]):
-                        # Opcion de loggear "Esperando a que se complete orden... y el lastprice, tp y sl para comprobar si se cumplió lo esperado"
-                        print(f"Posición short abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
-                        time.sleep(60)
-                    # Comparo el disponible antes del trade y después del trade
-                    send_message(f"¡TRADE CERRADO! Resultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO") 
-                    sys.exit()                 
-                posicion_symbols[contador_symbols] = 1
-                inicio_timers[contador_symbols] = time.time()
+                # Compruebo condiciones para long (solo opera entre las 22 de la noche y las 12 del mediodia)
+                if condicion_alerta_minimo:
+                    #send_message(f"{symbols[contador_symbols]} a {porcentaje_distancia_minimo}%     {log_mensaje_minimo} MÍNIMO")
+                    if condicion_exacta_long:
+                        meter_operacion(session=session, symbol=symbols[contador_symbols], lastprice=lastprice, abrir_long=condicion_exacta_long, abrir_short=False, minimo=minimo, maximo=maximo)
+                        while hay_posicion(session, symbols[contador_symbols]):
+                            # Opcion de loggear "Esperando a que se complete orden... y el lastprice, tp y sl para comprobar si se cumplió lo esperado"
+                            print(f"Posición long abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
+                            time.sleep(60)
+                        # Comparo el disponible antes del trade y después del trade
+                        send_message(f"¡TRADE CERRADO! Resultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
+                        sys.exit()
+                    posicion_symbols[contador_symbols] = 1
+                    inicio_timers[contador_symbols] = time.time()
+                # Compruebo condiciones para short (solo entre las 22 de la noche y las 12 del mediodia)
+                elif condicion_alerta_maximo:
+                    #send_message(f"{symbols[contador_symbols]} a {porcentaje_distancia_maximo}%     {log_mensaje_maximo} MÁXIMO")
+                    if condicion_exacta_short:
+                        meter_operacion(session=session, symbol=symbols[contador_symbols], lastprice=lastprice, abrir_long=False, abrir_short=condicion_exacta_short, minimo=minimo, maximo=maximo)
+                        while hay_posicion(session, symbols[contador_symbols]):
+                            # Opcion de loggear "Esperando a que se complete orden... y el lastprice, tp y sl para comprobar si se cumplió lo esperado"
+                            print(f"Posición short abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
+                            time.sleep(60)
+                        # Comparo el disponible antes del trade y después del trade
+                        send_message(f"¡TRADE CERRADO! Resultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
+                        sys.exit()
+                    posicion_symbols[contador_symbols] = 1
+                    inicio_timers[contador_symbols] = time.time()
 
-            time.sleep(4)
-            contador_symbols = contador_symbols + 1             
-        except (Exception,):
-            # Posibilidad de mandar mensaje a telegram para avisar
-            #send_message(f"El bot se cerró inesperadamente")
-            print("el bot fallo en bot_signals")
-            contador_symbols = contador_symbols + 1  
-            time.sleep(2) 
-            pass
+                time.sleep(4)
+                contador_symbols = contador_symbols + 1
+            except (Exception,):
+                # Posibilidad de mandar mensaje a telegram para avisar
+                #send_message(f"El bot se cerró inesperadamente")
+                print("el bot fallo en bot_signals")
+                contador_symbols = contador_symbols + 1
+                time.sleep(2)
+                pass
+        else:
+            # Si no está en la franja de operar que avise cada hora
+            print('Obteniendo máximos y mínimos...')
+            time.sleep(3600)

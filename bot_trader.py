@@ -6,7 +6,7 @@ import time
 def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo, maximo):    
     
     # Inicialización de las variables, necesario según si la orden es un long o un short
-    long  = session.my_position(symbol=symbol)['result'][0]['size']                 # Para longs hay que pillar de [0]
+    long = session.my_position(symbol=symbol)['result'][0]['size']                 # Para longs hay que pillar de [0]
     short = session.my_position(symbol=symbol)['result'][-1]['size']                # Para shorts hay que pillar de [-1]
 
     # Obtener los USDT disponibles que tengo, ['equity'], o si tengo ya una posición lo que me queda estará en ['available_balance']
@@ -15,7 +15,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
     pct_sl = 0.6
 
     if long > 0 and short == 0:
-	    # Side será 'Buy'
+        # Side será 'Buy'
         position_side = session.my_position(symbol=symbol)['result'][0]['side']
         # Precio de entrada de una orden abierta
         entry_price = session.my_position(symbol=symbol)['result'][0]['entry_price']
@@ -68,7 +68,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
                                     side='Buy',
                                     symbol=symbol,
                                     order_type='Market',
-                                    qty=get_qty(disponible=disponible,apalancamiento=apalancamiento,lastprice=lastprice),
+                                    qty=get_qty(disponible=disponible, apalancamiento=apalancamiento, entry_price=lastprice),
                                     price=lastprice,
                                     stop_loss=sl,
                                     take_profit=tp,
@@ -88,7 +88,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
                     side='Sell',
                     symbol=symbol,
                     order_type='Market',
-                    qty=get_qty(disponible=disponible, apalancamiento=apalancamiento, lastprice=lastprice),
+                    qty=get_qty(disponible=disponible, apalancamiento=apalancamiento, entry_price=lastprice),
                     price=lastprice,
                     stop_loss=sl,
                     take_profit=tp,
@@ -135,7 +135,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
 
 
 """
-	# MIRAR QUE ES REDUCE_ONLY Y CLOSE_ON_TRIGGER
+    # MIRAR QUE ES REDUCE_ONLY Y CLOSE_ON_TRIGGER
     #
     # Para ver cual es mi SL                                => print(session.my_position(symbol=symbol)['result'][0]['stop_loss'])
     # Para ver si estoy en posicion                         => session.my_position(symbol=symbol)['result'][0]['size']                      (0 no, > 0 LONG, < 0 SHORT)
