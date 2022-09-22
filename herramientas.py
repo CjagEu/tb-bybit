@@ -54,8 +54,15 @@ def signal_kama(open, close, kama, nvelas2):
 # Calcula la cantidad que hay que poner en la orden teniendo en cuenta el apalancamiento y el disponible (en USDT) de la cuenta
 # si quiero poner la máxima cantidad posible seria: (disponible * apalancamiento)/lastprice
 # Le quito 5 usdt para asegurarme de que entre bien las ordenes condicionales
-def get_qty(disponible, apalancamiento, entry_price):
-    return math.floor(((disponible-5) * apalancamiento) / entry_price)
+def get_qty(symbol, disponible, apalancamiento, lastprice):
+    # Condición especial para BTC, solo se pueden poner órdenes con 3 decimales y para asegurar que el redondeo no supere mi dinero le resto 0.001
+    if symbol == 'BTCUSDT':
+        return round((((disponible-5) * apalancamiento) / lastprice), 3) - 0.001
+    # Condición especial para ETH, solo se pueden poner órdenes con 2 decimales y para asegurar que el redondeo no supere mi dinero le resto 0.01
+    elif symbol == 'ETHUSDT':
+        return round((((disponible - 5) * apalancamiento) / lastprice), 2) - 0.01
+    # Si devuelve por aquí es que el precio de la moneda permite que la cantidad sea mayor que 0.algo
+    return math.floor(((disponible-5) * apalancamiento) / lastprice)
 
 
 # Devuelve true si el cuerpo de la vela anterior fue menor a tamanio_vela (open y close deberían estar al revés pero así funciona mejor...)
@@ -299,6 +306,9 @@ def obtener_decimales_para_bybit(entry_price):
     numero = str(entry_price)
     start = numero.find(".")
     numero = numero[start+1:10]
+    # Por problemas a la hora de poner la orden, si el número de decimales es 1, debe devolver 0
+    if int(str(len(numero))) == 1:
+        return 0
     return int(str(len(numero)))
 
 

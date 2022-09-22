@@ -62,40 +62,40 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
             if abrir_long:
                 # LONG (qty es cantidad de monedas, por eso uso la función get_qty())
                 # Busco ratio 1:2   [SL: 0.5% <--> TP: 1%]
-                sl = float(lastprice*0.995).__round__(obtener_decimales_para_bybit(entry_price=lastprice))
+                sl = float(lastprice*0.994).__round__(obtener_decimales_para_bybit(entry_price=lastprice))
                 tp = float(lastprice*1.01).__round__(obtener_decimales_para_bybit(entry_price=lastprice))
                 session.place_active_order(
                                     side='Buy',
                                     symbol=symbol,
                                     order_type='Market',
-                                    qty=get_qty(disponible=disponible, apalancamiento=apalancamiento, entry_price=lastprice),
+                                    qty=get_qty(symbol=symbol, disponible=disponible, apalancamiento=apalancamiento, lastprice=lastprice),
                                     price=lastprice,
                                     stop_loss=sl,
                                     take_profit=tp,
                                     time_in_force='GoodTillCancel',
                                     reduce_only=False,
                                     close_on_trigger=False)
-                #session.place_conditional_order(side                = 'Buy',symbol              = symbol,order_type          = 'Limit',qty                 = get_qty(disponible=disponible, apalancamiento=apalancamiento, entry_price=minimo),price               = minimo,base_price          = lastprice,stop_px             = minimo,                                        stop_loss           = sl,take_profit         = tp,time_in_force       = 'GoodTillCancel',trigger_by          = 'LastPrice',reduce_only         = False,close_on_trigger    = False)                
+                #session.place_conditional_order(side                = 'Buy',symbol              = symbol,order_type          = 'Limit',qty                 = get_qty(symbol=symbol, disponible=disponible, apalancamiento=apalancamiento, lastprice=minimo),price               = minimo,base_price          = lastprice,stop_px             = minimo,                                        stop_loss           = sl,take_profit         = tp,time_in_force       = 'GoodTillCancel',trigger_by          = 'LastPrice',reduce_only         = False,close_on_trigger    = False)
                 #send_message(f"ORDEN CONDICIONAL LONG PENDIENTE en {symbol}.\nEN: {minimo}\nSL: {sl}\nTP: {tp}")
                 send_message(f"ORDEN A MERCADO LONG en {symbol}.\nEN: {lastprice}\nSL: {sl}\nTP: {tp}")
                 time.sleep(2)
             elif abrir_short:
                 # SHORT (qty es cantidad de monedas, por eso uso la función get_qty())
                 # Busco ratio 1:2   [SL: 0.5% <--> TP: 1%]
-                sl = float(lastprice*1.005).__round__(obtener_decimales_para_bybit(entry_price=lastprice))
+                sl = float(lastprice*1.006).__round__(obtener_decimales_para_bybit(entry_price=lastprice))
                 tp = float(lastprice*0.99).__round__(obtener_decimales_para_bybit(entry_price=lastprice))
                 session.place_active_order(
                     side='Sell',
                     symbol=symbol,
                     order_type='Market',
-                    qty=get_qty(disponible=disponible, apalancamiento=apalancamiento, entry_price=lastprice),
+                    qty=get_qty(symbol=symbol, disponible=disponible, apalancamiento=apalancamiento, lastprice=lastprice),
                     price=lastprice,
                     stop_loss=sl,
                     take_profit=tp,
                     time_in_force='GoodTillCancel',
                     reduce_only=False,
                     close_on_trigger=False)
-                #session.place_conditional_order(side                = 'Sell',symbol              = symbol,order_type          = 'Limit',qty                 = get_qty(disponible=disponible, apalancamiento=apalancamiento, entry_price=maximo),price               = maximo,base_price          = lastprice,stop_px             = maximo, stop_loss           = sl,take_profit         = tp,time_in_force       = 'GoodTillCancel',trigger_by          = 'LastPrice',                                    reduce_only         = False,close_on_trigger    = False)
+                #session.place_conditional_order(side                = 'Sell',symbol              = symbol,order_type          = 'Limit',qty                 = get_qty(symbol=symbol, disponible=disponible, apalancamiento=apalancamiento, lastprice=maximo),price               = maximo,base_price          = lastprice,stop_px             = maximo, stop_loss           = sl,take_profit         = tp,time_in_force       = 'GoodTillCancel',trigger_by          = 'LastPrice',                                    reduce_only         = False,close_on_trigger    = False)
                 #send_message(f"ORDEN CONDICIONAL SHORT PENDIENTE en {symbol}.\nEN: {maximo}\nSL: {sl}\nTP: {tp}") 
                 send_message(f"ORDEN A MERCADO SHORT en {symbol}.\nEN: {lastprice}\nSL: {sl}\nTP: {tp}")
                 time.sleep(2)        
@@ -129,7 +129,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
 
     except (Exception,):
         # Posibilidad de mandar mensaje a telegram para avisar
-        send_message(f"¡ORDEN ENTRÓ! (exception)")
+        send_message(f"Exception en bot_trader.py")
         #print("el bot fallo en bot_trader, porque ya se triggereó la orden")
         pass
 
