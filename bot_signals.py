@@ -1,4 +1,3 @@
-from pybit.usdt_perpetual import HTTP
 from herramientas import *
 from telegram_bot import send_message
 from config import MY_API_KEY, MY_SECRET_KEY
@@ -153,3 +152,4 @@ while True:
             # Si no está en la franja de operar que avise cada hora
             print(f'{datetime.now().hour}:{datetime.now().minute}:{datetime.now().second}   Obteniendo máximos y mínimos...')
             time.sleep(3600)
+

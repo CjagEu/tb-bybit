@@ -1,7 +1,8 @@
 from herramientas import *
 from telegram_bot import send_message
-import time
 
+import time
+import random
 
 def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo, maximo):    
     
@@ -52,11 +53,11 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
         if position_size == 0:
 
             # Generar apalancamiento aleatorio
-            apalancamiento = generar_apalancamiento_aleatorio()
+            apalancamiento = round(random.uniform(1, 10), 1)
             session.set_leverage(symbol=symbol, buy_leverage=apalancamiento, sell_leverage=apalancamiento)
             time.sleep(1)
             # Establecer apalancamiento real
-            apalancamiento = calcular_apalancamiento(capital=disponible, riesgo=pct_riesgo, sl=pct_sl)
+            apalancamiento = calcular_apalancamiento(capital=disponible, pct_riesgo=pct_riesgo, pct_sl=pct_sl)
             session.set_leverage(symbol=symbol, buy_leverage=apalancamiento, sell_leverage=apalancamiento)
 
             if abrir_long:
@@ -134,6 +135,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
         pass
 
 
+# TODO Establecer dos variables apalancamiento distintas para long y short para reducir la probabilidad de que se repita el numero
 """
     # MIRAR QUE ES REDUCE_ONLY Y CLOSE_ON_TRIGGER
     #
