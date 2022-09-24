@@ -118,10 +118,10 @@ while True:
                         meter_operacion(session=session, symbol=symbols[contador_symbols], lastprice=lastprice, abrir_long=condicion_exacta_long, abrir_short=False, minimo=minimo, maximo=maximo)
                         while hay_posicion(session, symbols[contador_symbols]):
                             # Opcion de loggear "Esperando a que se complete orden... y el lastprice, tp y sl para comprobar si se cumplió lo esperado"
-                            print(f"Posición long abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
+                            print(f"{datetime.now().hour}:{datetime.now().minute}:{datetime.now().second}   Posición long abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
                             time.sleep(60)
                         # Comparo el disponible antes del trade y después del trade
-                        send_message(f"¡TRADE CERRADO! Resultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
+                        send_message(f"¡TRADE CERRADO!\nResultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
                         sys.exit()
                     posicion_symbols[contador_symbols] = 1
                     inicio_timers[contador_symbols] = time.time()
@@ -132,10 +132,10 @@ while True:
                         meter_operacion(session=session, symbol=symbols[contador_symbols], lastprice=lastprice, abrir_long=False, abrir_short=condicion_exacta_short, minimo=minimo, maximo=maximo)
                         while hay_posicion(session, symbols[contador_symbols]):
                             # Opcion de loggear "Esperando a que se complete orden... y el lastprice, tp y sl para comprobar si se cumplió lo esperado"
-                            print(f"Posición short abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
+                            print(f"{datetime.now().hour}:{datetime.now().minute}:{datetime.now().second}   Posición short abierta en {symbols[contador_symbols]}, esperando a que toque TP o SL...")
                             time.sleep(60)
                         # Comparo el disponible antes del trade y después del trade
-                        send_message(f"¡TRADE CERRADO! Resultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
+                        send_message(f"¡TRADE CERRADO!\nResultado: {round(session.get_wallet_balance(coin='USDT')['result']['USDT']['equity']-disponible_antes,2)} USDT\nBOT APAGADO")
                         sys.exit()
                     posicion_symbols[contador_symbols] = 1
                     inicio_timers[contador_symbols] = time.time()
@@ -151,5 +151,5 @@ while True:
                 pass
         else:
             # Si no está en la franja de operar que avise cada hora
-            print('Obteniendo máximos y mínimos...')
+            print(f'{datetime.now().hour}:{datetime.now().minute}:{datetime.now().second}   Obteniendo máximos y mínimos...')
             time.sleep(3600)
