@@ -78,7 +78,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
                                     close_on_trigger=False)
                 #session.place_conditional_order(side                = 'Buy',symbol              = symbol,order_type          = 'Limit',qty                 = get_qty(symbol=symbol, disponible=disponible, apalancamiento=apalancamiento, lastprice=minimo),price               = minimo,base_price          = lastprice,stop_px             = minimo,                                        stop_loss           = sl,take_profit         = tp,time_in_force       = 'GoodTillCancel',trigger_by          = 'LastPrice',reduce_only         = False,close_on_trigger    = False)
                 #send_message(f"ORDEN CONDICIONAL LONG PENDIENTE en {symbol}.\nEN: {minimo}\nSL: {sl}\nTP: {tp}")
-                send_message(f"ORDEN A MERCADO LONG en {symbol}.\nAP: {apalancamiento}x\nPR:{pct_riesgo}%\nPS:{pct_sl}%\nEN: {lastprice}\nSL: {sl}\nTP: {tp}")
+                send_message(f"ORDEN A MERCADO LONG en {symbol}.\nAP: {apalancamiento}x\nPR: {pct_riesgo}%\nPS: {pct_sl}%\nEN: {lastprice}\nSL: {sl}\nTP: {tp}")
                 time.sleep(2)
             elif abrir_short:
                 # SHORT (qty es cantidad de monedas, por eso uso la función get_qty())
@@ -98,7 +98,7 @@ def meter_operacion(session, symbol, lastprice, abrir_long, abrir_short, minimo,
                     close_on_trigger=False)
                 #session.place_conditional_order(side                = 'Sell',symbol              = symbol,order_type          = 'Limit',qty                 = get_qty(symbol=symbol, disponible=disponible, apalancamiento=apalancamiento, lastprice=maximo),price               = maximo,base_price          = lastprice,stop_px             = maximo, stop_loss           = sl,take_profit         = tp,time_in_force       = 'GoodTillCancel',trigger_by          = 'LastPrice',                                    reduce_only         = False,close_on_trigger    = False)
                 #send_message(f"ORDEN CONDICIONAL SHORT PENDIENTE en {symbol}.\nEN: {maximo}\nSL: {sl}\nTP: {tp}") 
-                send_message(f"ORDEN A MERCADO SHORT en {symbol}.\nAP: {apalancamiento}x\nPR:{pct_riesgo}%\nPS:{pct_sl}%\nEN: {lastprice}\nSL: {sl}\nTP: {tp}")
+                send_message(f"ORDEN A MERCADO SHORT en {symbol}.\nAP: {apalancamiento}x\nPR: {pct_riesgo}%\nPS: {pct_sl}%\nEN: {lastprice}\nSL: {sl}\nTP: {tp}")
                 time.sleep(2)        
 
 
