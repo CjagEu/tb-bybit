@@ -1,6 +1,6 @@
 import telegram
 
-TELEGRAM_TOKEN = '5497695474:AAHGUgF0nZBsb4DR67lIEFYTxw2tjxhjeL0'
+TELEGRAM_TOKEN = ''
 
 
 def send_message(msg):
